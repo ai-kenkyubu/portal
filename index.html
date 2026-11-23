@@ -151,6 +151,20 @@ main{padding:14px 12px 34px}
 .stats{gap:9px}
 .stat .num{font-size:22px}
 }
+
+/* mobile fix 2026-11-24b */
+@media(max-width:820px){
+.layout{align-items:stretch}
+main{width:100%;min-width:0;box-sizing:border-box}
+.carousel{width:100%;max-width:100%}
+.slides{max-width:100%}
+.slide{min-width:0}
+.slide .cap{max-width:100%;box-sizing:border-box}
+.slide .cap .t,.slide .cap .d{overflow-wrap:anywhere}
+aside{scrollbar-width:none}
+aside::-webkit-scrollbar{display:none}
+.reveal{opacity:1 !important;transform:none !important;transition:none !important}
+}
 </style>
 </head>
 <body>
