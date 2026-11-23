@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI研究部ポータル｜AIだけで、どこまでできるか</title>
+<meta name="description" content="AI研究部の玄関。AIに予想もメディア運営も全部やらせてみる実験場。各プロジェクトの『なぜ』と最新の数字をまとめています。">
+<style>
+  :root{
+    --bg:#070b16; --panel:#0d1424; --panel2:#111a30;
+    --line:#22304f; --text:#e8edf7; --muted:#93a3c0;
+    --cyan:#37e0ff; --violet:#9a6bff; --lime:#c6ff4d; --pink:#ff5d8f;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;line-height:1.7}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+  /* ===== ticker ===== */
+  .ticker{background:#05070d;border-bottom:1px solid var(--line);overflow:hidden;white-space:nowrap;padding:8px 0;font-size:13px;color:var(--muted)}
+  .ticker-track{display:inline-block;animation:tick 30s linear infinite}
+  .ticker b{color:var(--cyan);font-weight:700}
+  .ticker .hit{color:var(--lime)}
+  @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ===== hero ===== */
+  .hero{position:relative;padding:84px 0 64px;text-align:center;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:-40%;background:
+    radial-gradient(circle at 25% 30%,rgba(55,224,255,.16),transparent 42%),
+    radial-gradient(circle at 78% 22%,rgba(154,107,255,.18),transparent 45%),
+    radial-gradient(circle at 55% 85%,rgba(198,255,77,.08),transparent 40%);
+    animation:drift 14s ease-in-out infinite alternate}
+  @keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(30px,-18px) scale(1.06)}}
+  .hero-inner{position:relative}
+  .hero .kicker{letter-spacing:.35em;font-size:12px;color:var(--cyan);font-weight:700}
+  .hero h1{font-size:clamp(34px,6.4vw,62px);line-height:1.25;font-weight:900;margin:18px 0 8px}
+  .hero h1 .grad{background:linear-gradient(92deg,var(--cyan),var(--violet),var(--lime));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.lead{color:var(--muted);max-width:640px;margin:14px auto 0;font-size:15px}
+  .stats{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:36px}
+  .stat{background:rgba(13,20,36,.85);border:1px solid var(--line);border-radius:14px;padding:14px 22px;min-width:150px}
+  .stat .num{font-size:30px;font-weight:900;color:#fff}
+  .stat .num small{font-size:14px;color:var(--muted)}
+  .stat .lbl{font-size:11px;color:var(--muted);letter-spacing:.12em}
+
+  /* ===== sections ===== */
+  section{padding:30px 0 8px}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin:26px 0 18px}
+  .sec-head .no{font-size:12px;color:var(--cyan);letter-spacing:.25em;font-weight:700}
+  .sec-head h2{font-size:24px;font-weight:900}
+
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:760px){.cards{grid-template-columns:1fr}}
+  .card{background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:20px;padding:28px;position:relative;overflow:hidden;transition:transform .25s,border-color .25s}
+  .card:hover{transform:translateY(-5px);border-color:var(--cyan)}
+  .card::after{content:"";position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(55,224,255,.10),transparent 45%);opacity:0;transition:opacity .25s;pointer-events:none}
+  .card:hover::after{opacity:1}
+  .card .tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.15em;padding:4px 10px;border-radius:999px}
+  .tag-gamble{background:rgba(55,224,255,.14);color:var(--cyan);border:1px solid rgba(55,224,255,.4)}
+  .tag-lab{background:rgba(198,255,77,.12);color:var(--lime);border:1px solid rgba(198,255,77,.4)}
+  .card h3{font-size:22px;font-weight:900;margin:14px 0 4px}
+  .card .q{font-size:19px;font-weight:800;line-height:1.5;margin:10px 0}
+  .card .q em{font-style:normal;color:var(--cyan)}
+  .card.lab .q em{color:var(--lime)}
+  .card p{color:var(--muted);font-size:14px}
+  .mini-stats{display:flex;gap:18px;margin:18px 0 6px;flex-wrap:wrap}
+  .mini-stats div b{display:block;font-size:20px}
+  .mini-stats div span{font-size:11px;color:var(--muted)}
+  .go{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-weight:800;font-size:14px;color:#fff;text-decoration:none}
+  .go .arr{transition:transform .2s}
+  .card:hover .go .arr{transform:translateX(5px)}
+
+  .why{background:var(--panel);border:1px dashed var(--line);border-radius:16px;padding:20px 24px;color:var(--muted);font-size:14px}
+  .why b{color:var(--text)}
+
+  .related{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:760px){.related{grid-template-columns:1fr}}
+  .rel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;font-size:13px;color:var(--muted)}
+  .rel b{display:block;color:var(--text);font-size:15px;margin-bottom:4px}
+
+  footer{margin-top:56px;border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted);font-size:12px;text-align:center}
+
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.on{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<div class="ticker"><div class="ticker-track" id="tickerTrack">
+  <span>🚴 競輪 累計1,248レース検証済み ／ 三連単的中率 <b>24.2%</b>　・　🚤 競艇 累計423レース ／ 三連単的中率 <b>23.6%</b>　・　🐴 競馬 重賞検証スタート（11/29 ジャパンカップ）　・　🧪 白黒ラボ レポート2本公開中　・　<span class="hit">検証は毎日更新中</span>　・　</span>
+</div></div>
+
+<header class="hero">
+  <div class="wrap hero-inner">
+    <div class="kicker">AI RESEARCH DEPARTMENT</div>
+    <h1>AIだけで、<br><span class="grad">どこまでできるか。</span></h1>
+    <p class="lead">AI研究部は、予想も、メディア運営も、サイト制作も、AIに全部やらせてみる実験場です。<br>うまくいったことも、失敗も、数字も、全部公開します。</p>
+    <p style="color:var(--muted);font-size:12px;margin-top:10px">※ 数字は2026年11月23日時点の実績です</p>
+    <div class="stats">
+      <div class="stat"><div class="num"><span class="count" data-to="1671">0</span><small> レース</small></div><div class="lbl">検証した公営競技</div></div>
+      <div class="stat"><div class="num"><span class="count" data-to="2">0</span><small> 本</small></div><div class="lbl">白黒ラボ検証レポート</div></div>
+      <div class="stat"><div class="num"><span class="count" data-to="4">0</span><small> AI</small></div><div class="lbl">働いているAIの数</div></div>
+      <div class="stat"><div class="num"><span class="count" data-to="1">0</span><small> 人</small></div><div class="lbl">人間の仕事は「承認」だけ</div></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <div class="sec-head reveal"><span class="no">EXPERIMENTS</span><h2>いま走っている実験</h2></div>
+    <div class="cards">
+      <article class="card gamble reveal">
+        <span class="tag tag-gamble">実験 01 ｜ 予想の検証</span>
+        <h3>🚴🚤🐴 公営競技 AI予想検証</h3>
+        <p class="q">「AI予想って、<em>本当に当たるの？</em>」</p>
+        <p>「当たります」と言う予想サイトはたくさんあります。でも、全レース分の的中率と回収率まで公開している所はほとんどありません。だから自分たちでやります。競輪・競艇の全レースと競馬の重賞をAIが予想し、毎晩ぜんぶ検証して、数字をそのまま出します。</p>
+        <div class="mini-stats">
+          <div><b>24.2%</b><span>競輪 三連単的中率</span></div>
+          <div><b>23.6%</b><span>競艇 三連単的中率</span></div>
+          <div><b>毎日</b><span>予想→検証を公開</span></div>
+        </div>
+        <a class="go" href="https://ai-kenkyubu.github.io/">検証ダッシュボードを見る <span class="arr">→</span></a>
+      </article>
+
+      <article class="card lab reveal">
+        <span class="tag tag-lab">実験 02 ｜ 運営の実験</span>
+        <h3>🧪 白黒ラボ</h3>
+        <p class="q">「AIだけで、<em>メディアは運営できるの？</em>」</p>
+        <p>テーマ決め、調査、試算、記事、サイト制作までAIチームが自律的に行い、人間は承認だけ。「日常の損得問題をデータと試算で白黒つける」検証サイトを、AIだけで回し続けたらどうなるかを記録します。</p>
+        <div class="mini-stats">
+          <div><b>2本</b><span>公開済みレポート</span></div>
+          <div><b>16,110円</b><span>見つけた年間差額</span></div>
+          <div><b>募集中</b><span>検証リクエスト</span></div>
+        </div>
+        <a class="go" href="https://ai-kenkyubu.github.io/shirokuro-lab/">白黒ラボに行く <span class="arr">→</span></a>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head reveal"><span class="no">WHY</span><h2>なぜ、こんなことをやるのか</h2></div>
+    <div class="why reveal">
+      AIは「すごい」と言われますが、<b>何ができて、何ができないのか</b>は、実際にやらせてみないと分かりません。
+      予想させれば的中率が見える。運営させれば見落としや失敗が見える。
+      AI研究部は、その<b>可能性と限界を数字で確かめる場所</b>です。盛りません。都合の悪い数字も出します。
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head reveal"><span class="no">RELATED</span><h2>関連プロジェクト・記録</h2></div>
+    <div class="related">
+      <div class="rel reveal"><b>📝 note（AI研究部）</b>毎日の検証結果と、HP実験室の連載はこちら。</div>
+      <div class="rel reveal"><b>🧪 白黒ラボ</b>日常のモヤモヤを数値化する検証サイト。リクエスト受付中。</div>
+      <div class="rel reveal"><b>📺 ライブ配信リンク集</b>競輪・競艇・競馬の公式ライブ配信まとめ。</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  AI研究部 ｜ AIを使用して運営しています。予想の販売・買い推奨はしません。
+</footer>
+
+<script>
+  // ticker: duplicate content for seamless loop
+  const t = document.getElementById('tickerTrack');
+  t.innerHTML += t.innerHTML;
+
+  // count-up
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target, to = +el.dataset.to, t0 = performance.now();
+    const step = now => {
+      const p = Math.min((now - t0) / 1200, 1);
+      el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))).toLocaleString();
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step); io.unobserve(el);
+  }), {threshold: .4});
+  document.querySelectorAll('.count').forEach(el => io.observe(el));
+
+  // reveal on scroll
+  const io2 = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('on'); io2.unobserve(e.target); }
+  }), {threshold: .15});
+  document.querySelectorAll('.reveal').forEach(el => io2.observe(el));
+
+  // card spotlight follows cursor
+  document.querySelectorAll('.card').forEach(c => {
+    c.addEventListener('pointermove', e => {
+      const r = c.getBoundingClientRect();
+      c.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+      c.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+    });
+  });
+</script>
+<script data-goatcounter="https://ai-kenkyubu.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
